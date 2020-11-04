@@ -78,9 +78,7 @@ class Backend {
                     result?.let {
                         onBitmapResult.invoke(result)
                     }
-
                 }
-
             }.execute(null, null, null)
         }
     }

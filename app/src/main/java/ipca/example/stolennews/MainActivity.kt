@@ -1,9 +1,6 @@
 package ipca.example.stolennews
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.AsyncTask
-
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +8,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import org.json.JSONArray
 import org.json.JSONObject
-import java.net.URL
-
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,7 +39,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     inner class ArticlesAdapter : BaseAdapter() {
@@ -64,6 +57,14 @@ class MainActivity : AppCompatActivity() {
                 Backend.getBitmapFromUrl(articles[position].urlToImage!!){
                     imageViewPhoto.setImageBitmap(it)
                 }
+            }
+
+            rowView.isClickable = true
+            rowView.setOnClickListener {
+                val intent = Intent (this@MainActivity, ArticleDetailActivity::class.java)
+                intent.putExtra(ArticleDetailActivity.ARTICLE_URL   , articles[position].url  )
+                intent.putExtra(ArticleDetailActivity.ARTICLE_TITLE , articles[position].title)
+                startActivity(intent)
             }
 
             return rowView
