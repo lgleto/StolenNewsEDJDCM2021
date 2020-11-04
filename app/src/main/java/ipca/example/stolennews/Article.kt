@@ -6,6 +6,7 @@ import org.json.JSONObject
 // Created by lourencogomes on 21/10/2020.
 //
 class Article {
+
     var title        : String? = null
     var description  : String? = null
     var url          : String? = null
