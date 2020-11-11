@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -23,9 +25,12 @@ class MainActivity : AppCompatActivity() {
         val listViewArticles  = findViewById<ListView>(R.id.listViewArticles)
         listViewArticles.adapter = articlesAdapter
 
-        Backend.getLatestNews(){ result ->
+        GlobalScope.async {
+            var result  = Backend.getLatestNews()
             if (result =="Sem internet!"){
-                Toast.makeText(this@MainActivity, "Sem internet!", Toast.LENGTH_LONG).show()
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "Sem internet!", Toast.LENGTH_LONG).show()
+                }
             }else {
                 val jsonObject = JSONObject(result)
                 if (jsonObject.get("status").equals("ok")){
@@ -35,10 +40,15 @@ class MainActivity : AppCompatActivity() {
                         val article = Article.fromJson(jsonArticle)
                         articles.add(article)
                     }
-                    articlesAdapter.notifyDataSetChanged()
+                    runOnUiThread {
+                        articlesAdapter.notifyDataSetChanged()
+                    }
+
                 }
             }
         }
+
+
     }
 
     inner class ArticlesAdapter : BaseAdapter() {
